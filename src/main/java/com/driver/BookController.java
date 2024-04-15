@@ -1,6 +1,7 @@
 package com.driver;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,8 @@ public class BookController {
     @PostMapping("/create-book")
     public ResponseEntity<Book> createBook(@RequestBody Book book){
         // Your code goes here.
+        book.setId(id++);
+        bookList.add(book);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
     }
 
@@ -68,10 +71,12 @@ public class BookController {
     // deleteBookById()
     @DeleteMapping("/delete-book-by-id/{id}")
     public ResponseEntity<?> deleteBook(@PathVariable Integer bookId){
-        for(Book book : bookList){
+        Iterator<Book> iterator = bookList.iterator();
+        while(iterator.hasNext()){
+            Book book = iterator.next();
             if(book.getId() == bookId){
-                bookList.remove(bookId);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                iterator.remove();
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
