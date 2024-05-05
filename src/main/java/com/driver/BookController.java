@@ -57,29 +57,37 @@ public class BookController {
     // pass id as path variable
     // getBookById()
     @GetMapping("/get-book-by-id/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable Integer bookId){
+    public ResponseEntity<Book> getBook(@PathVariable Integer id){
+        Book book1 = null;
         for(Book book : bookList){
-            if(book.getId() == bookId){
-                return new ResponseEntity<>(book, HttpStatus.CREATED);
+            if(book.getId() == id){
+                book1  = book;
             }
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(book1,HttpStatus.FOUND);
     }
 
     // delete request /delete-book-by-id/{id}
     // pass id as path variable
     // deleteBookById()
     @DeleteMapping("/delete-book-by-id/{id}")
-    public ResponseEntity<?> deleteBook(@PathVariable Integer bookId){
-        Iterator<Book> iterator = bookList.iterator();
-        while(iterator.hasNext()){
-            Book book = iterator.next();
-            if(book.getId() == bookId){
-                iterator.remove();
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Book> deleteBook(@PathVariable Integer id){
+        Book book = null;
+        for(Book b : bookList){
+            if(b.getId() == id){
+                book = b;
             }
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        bookList.remove(book);
+//        Iterator<Book> iterator = bookList.iterator();
+//        while(iterator.hasNext()){
+//            Book book = iterator.next();
+//            if(book.getId() == bookId){
+//                iterator.remove();
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//            }
+//        }
+        return new ResponseEntity<>(HttpStatus.FOUND);
     }
 
     // get request /get-all-books
